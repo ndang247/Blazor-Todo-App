@@ -1,0 +1,39 @@
+﻿@page "/todo"
+
+@* Show a count of the number of todo items that AREN'T complete. *@
+@* For every todo in todoes if todo.IsDone = false count this item 
+   (i.e increment the count). *@
+<h3>Todo (@todos.Count(todo => !todo.IsDone))</h3>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            @* Make item editable and checkbox for complete item. *@
+            <input type="checkbox" @bind="todo.IsDone" />
+            <input @bind="todo.Title" />
+        </li>
+    }
+</ul>
+
+@* Bind the user input to the variable todoItem. *@
+<input placeholder="Add an item" @bind="todoItem" />
+<button @onclick="AddTodo">Add todo</button>
+
+@code {
+    private IList<TodoItem> todos = new List<TodoItem>();
+
+    // Store the value of the todo title from input.
+    private String todoItem;
+
+
+    private void AddTodo()
+    {
+        // Check if the todoItem is null, empty or white-space.
+        if (!string.IsNullOrWhiteSpace(todoItem))
+        {
+            todos.Add(new TodoItem { Title = todoItem });
+            todoItem = string.Empty;
+        }
+    }
+}
